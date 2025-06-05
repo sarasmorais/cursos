@@ -1,0 +1,198 @@
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: var(--space-4);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+
+.backButton {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  color: var(--color-text-secondary);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-md);
+  transition: background-color var(--transition-normal), color var(--transition-normal);
+  font-size: var(--font-size-sm);
+  
+  &:hover {
+    background-color: var(--color-surface-hover);
+    color: var(--color-text-primary);
+  }
+}
+
+.form {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  margin-bottom: var(--space-5);
+}
+
+.formGroup {
+  margin-bottom: var(--space-3);
+  
+  label {
+    display: block;
+    margin-bottom: var(--space-1);
+    font-weight: 500;
+    color: var(--color-text-primary);
+  }
+  
+  input, textarea {
+    width: 100%;
+    padding: var(--space-2) var(--space-3);
+    background-color: var(--color-background);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    color: var(--color-text-primary);
+    font-size: var(--font-size-md);
+    
+    &:focus {
+      border-color: var(--color-accent);
+      outline: none;
+    }
+  }
+  
+  textarea {
+    resize: vertical;
+    min-height: 100px;
+  }
+}
+
+.saveButton {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  background-color: var(--color-accent);
+  color: white;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  font-weight: 500;
+  transition: background-color var(--transition-normal);
+  border: none;
+  cursor: pointer;
+  
+  &:hover:not(:disabled) {
+    background-color: var(--color-accent-hover);
+  }
+  
+  &:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+}
+
+.lessonsSection {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-3);
+  
+  h2 {
+    margin-bottom: 0;
+    font-size: var(--font-size-xl);
+  }
+}
+
+.newButton {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  background-color: var(--color-accent);
+  color: white;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  transition: background-color var(--transition-normal);
+  
+  &:hover {
+    background-color: var(--color-accent-hover);
+    color: white;
+  }
+}
+
+.lessonList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.lessonItem {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  background-color: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  transition: background-color var(--transition-normal), border-color var(--transition-normal);
+  color: var(--color-text-primary);
+  
+  &:hover {
+    background-color: var(--color-surface-hover);
+    border-color: var(--color-accent);
+  }
+}
+
+.lessonNumber {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: var(--color-surface-hover);
+  font-weight: 600;
+  font-size: var(--font-size-sm);
+  flex-shrink: 0;
+}
+
+.lessonInfo {
+  flex: 1;
+  
+  h3 {
+    font-size: var(--font-size-md);
+    font-weight: 500;
+    margin-bottom: var(--space-1);
+  }
+}
+
+.lessonDuration {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-tertiary);
+}
+
+.emptyState {
+  text-align: center;
+  padding: var(--space-4) 0;
+  color: var(--color-text-secondary);
+}
+
+.loading, .error {
+  padding: var(--space-4);
+  text-align: center;
+}
+
+.error {
+  color: var(--color-error);
+  background-color: rgba(239, 68, 68, 0.1);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-3);
+}

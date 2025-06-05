@@ -1,0 +1,193 @@
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: var(--space-4);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+
+.backButton {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  color: var(--color-text-secondary);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-md);
+  transition: background-color var(--transition-normal), color var(--transition-normal);
+  font-size: var(--font-size-sm);
+  
+  &:hover {
+    background-color: var(--color-surface-hover);
+    color: var(--color-text-primary);
+  }
+}
+
+.form {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+}
+
+.formGroup {
+  margin-bottom: var(--space-3);
+  
+  label {
+    display: block;
+    margin-bottom: var(--space-1);
+    font-weight: 500;
+    color: var(--color-text-primary);
+  }
+  
+  input, textarea {
+    width: 100%;
+    padding: var(--space-2) var(--space-3);
+    background-color: var(--color-background);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    color: var(--color-text-primary);
+    font-size: var(--font-size-md);
+    
+    &:focus {
+      border-color: var(--color-accent);
+      outline: none;
+    }
+  }
+  
+  textarea {
+    resize: vertical;
+    min-height: 200px;
+    font-family: var(--font-family);
+  }
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+  
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.helper {
+  display: block;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-tertiary);
+  margin-top: var(--space-1);
+}
+
+.formActions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: var(--space-4);
+}
+
+.saveButton, .deleteButton {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  font-weight: 500;
+  transition: background-color var(--transition-normal);
+  border: none;
+  cursor: pointer;
+}
+
+.saveButton {
+  background-color: var(--color-accent);
+  color: white;
+  
+  &:hover:not(:disabled) {
+    background-color: var(--color-accent-hover);
+  }
+  
+  &:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+}
+
+.deleteButton {
+  background-color: transparent;
+  color: var(--color-error);
+  border: 1px solid var(--color-error);
+  
+  &:hover {
+    background-color: rgba(239, 68, 68, 0.1);
+  }
+}
+
+.deleteConfirm {
+  background-color: rgba(239, 68, 68, 0.1);
+  border: 1px solid var(--color-error);
+  border-radius: var(--radius-md);
+  padding: var(--space-3);
+  
+  p {
+    color: var(--color-error);
+    margin-bottom: var(--space-2);
+    font-weight: 500;
+  }
+}
+
+.confirmButtons {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.confirmYes, .confirmNo {
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: background-color var(--transition-normal);
+}
+
+.confirmYes {
+  background-color: var(--color-error);
+  color: white;
+  
+  &:hover:not(:disabled) {
+    background-color: color-mix(in srgb, var(--color-error), black 10%);
+  }
+  
+  &:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+}
+
+.confirmNo {
+  background-color: var(--color-surface);
+  color: var(--color-text-secondary);
+  border: 1px solid var(--color-border);
+  
+  &:hover {
+    background-color: var(--color-surface-hover);
+  }
+}
+
+.loading, .error {
+  padding: var(--space-4);
+  text-align: center;
+}
+
+.error {
+  color: var(--color-error);
+  background-color: rgba(239, 68, 68, 0.1);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-3);
+}
