@@ -9,7 +9,7 @@ function AdminLessonEdit() {
   const navigate = useNavigate();
   const isNewLesson = lessonId === 'nova';
 
-  const cursoId = parseInt(courseId ?? '', 10); // conversão segura
+  const cursoId = parseInt(courseId ?? '', 10);
 
   const [title, setTitle] = useState('');
   const [videoUrl, setVideoUrl] = useState('');
@@ -32,10 +32,11 @@ function AdminLessonEdit() {
 
   const fetchLessonData = async () => {
     try {
+      if (!lessonId || isNaN(Number(lessonId))) return;
       const { data, error } = await supabase
         .from('aulas')
         .select('*')
-        .eq('id', lessonId)
+        .eq('id', parseInt(lessonId))
         .single();
 
       if (error) throw error;
@@ -92,14 +93,16 @@ function AdminLessonEdit() {
         ordem: order,
       };
 
-      if (isNewLesson) {
+      if (isNewLesson || !lessonId || lessonId === 'undefined') {
         const { error } = await supabase.from('aulas').insert([lessonData]);
         if (error) throw error;
       } else {
+        const parsedLessonId = parseInt(lessonId);
+        if (isNaN(parsedLessonId)) throw new Error('ID da aula inválido.');
         const { error } = await supabase
           .from('aulas')
           .update(lessonData)
-          .eq('id', lessonId);
+          .eq('id', parsedLessonId);
         if (error) throw error;
       }
 
@@ -112,14 +115,19 @@ function AdminLessonEdit() {
   };
 
   const handleDelete = async () => {
-    if (!lessonId || isNewLesson) return;
+    if (!lessonId || isNewLesson || isNaN(Number(lessonId))) return;
 
     setDeleting(true);
     setError(null);
 
     try {
-      const { error } = await supabase.from('aulas').delete().eq('id', lessonId);
+      const { error } = await supabase
+        .from('aulas')
+        .delete()
+        .eq('id', parseInt(lessonId));
+
       if (error) throw error;
+
       navigate(`/admin/curso/${courseId}`);
     } catch (err: any) {
       console.error('Erro ao excluir aula:', err);
