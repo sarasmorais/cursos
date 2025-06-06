@@ -6,6 +6,11 @@
   overflow: hidden;
   background-color: #000;
   margin-bottom: var(--space-4);
+  /* Previne seleção de texto */
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
 }
 
 .videoIframe {
@@ -15,10 +20,28 @@
   width: 100%;
   height: 100%;
   border: none;
+  /* Remove outline para evitar destaque no foco */
+  outline: none;
+}
+
+/* Overlay para bloquear cliques no logo e título do YouTube */
+.videoContainer::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 200px;
+  height: 80px;
+  background: transparent;
+  z-index: 10;
+  pointer-events: auto;
+  cursor: default;
 }
 
 @media (max-width: 768px) {
   .videoContainer {
     border-radius: var(--radius-sm);
+    /* Para dispositivos móveis - previne zoom duplo toque */
+    touch-action: manipulation;
   }
 }

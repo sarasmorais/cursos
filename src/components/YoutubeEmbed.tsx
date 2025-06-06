@@ -7,15 +7,19 @@ interface YoutubeEmbedProps {
 }
 
 const YoutubeEmbed: React.FC<YoutubeEmbedProps> = ({ videoId, title }) => {
-  // Options to restrict YouTube player functionality:
-  // - rel=0: Disables related videos
-  // - modestbranding=1: Reduces YouTube branding
-  // - disablekb=1: Disables keyboard controls
-  // - controls=1: Shows video controls
-  // - fs=0: Disables fullscreen button
-  // - iv_load_policy=3: Disables video annotations
+  // Parâmetros para máxima restrição do YouTube:
+  // - rel=0: Desativa vídeos relacionados
+  // - modestbranding=1: Reduz a marca do YouTube
+  // - controls=1: Mostra apenas controles básicos
+  // - fs=0: Desativa botão de tela cheia
+  // - iv_load_policy=3: Desativa anotações do vídeo
+  // - showinfo=0: Remove informações do vídeo
+  // - cc_load_policy=0: Desativa legendas por padrão
+  // - disablekb=1: Desativa a maioria dos atalhos de teclado
+  // - playsinline=1: Para dispositivos móveis
+  // - widget_referrer: Remove referências externas
   
-  const embedUrl = `https://www.youtube.com/embed/${videoId}?rel=0&modestbranding=1&iv_load_policy=3`;
+  const embedUrl = `https://www.youtube-nocookie.com/embed/${videoId}?rel=0&modestbranding=1&iv_load_policy=3&showinfo=0&fs=0&controls=1&cc_load_policy=0&disablekb=1&playsinline=1&widget_referrer=deleted`;
 
   return (
     <div className={styles.videoContainer}>
@@ -23,9 +27,11 @@ const YoutubeEmbed: React.FC<YoutubeEmbedProps> = ({ videoId, title }) => {
         src={embedUrl}
         title={title}
         frameBorder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         allowFullScreen={false}
         className={styles.videoIframe}
+        referrerPolicy="no-referrer"
+        sandbox="allow-scripts allow-same-origin allow-presentation"
       ></iframe>
     </div>
   );
