@@ -4,6 +4,14 @@ import { supabase } from '../lib/supabase';
 import { ArrowLeft, Save, Trash2 } from 'lucide-react';
 import styles from './AdminLessonEdit.module.css';
 
+// Tipo para módulos
+type Module = {
+  id: number;
+  titulo: string;
+  curso_id: number;
+  ordem: number;
+};
+
 function AdminLessonEdit() {
   const { courseId, lessonId } = useParams<{ courseId: string; lessonId: string }>();
   const navigate = useNavigate();
@@ -16,6 +24,8 @@ function AdminLessonEdit() {
   const [content, setContent] = useState('');
   const [duration, setDuration] = useState('');
   const [order, setOrder] = useState(0);
+  const [moduleId, setModuleId] = useState<number | null>(null);
+  const [modules, setModules] = useState<Module[]>([]);
   const [loading, setLoading] = useState(!isNewLesson);
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
@@ -23,12 +33,38 @@ function AdminLessonEdit() {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   useEffect(() => {
+    if (cursoId && !isNaN(cursoId)) {
+      fetchModules();
+    }
+    
     if (lessonId && lessonId !== 'nova') {
       fetchLessonData();
     } else if (cursoId && !isNaN(cursoId)) {
       fetchNextOrderValue();
     }
   }, [cursoId, lessonId]);
+
+  const fetchModules = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('modulos')
+        .select('*')
+        .eq('curso_id', cursoId)
+        .order('ordem');
+
+      if (error) throw error;
+
+      setModules(data || []);
+      
+      // Se for uma nova aula e só há um módulo, seleciona automaticamente
+      if (isNewLesson && data && data.length === 1) {
+        setModuleId(data[0].id);
+      }
+    } catch (err: any) {
+      console.error('Erro ao carregar módulos:', err);
+      setError(err.message || 'Erro ao carregar módulos');
+    }
+  };
 
   const fetchLessonData = async () => {
     try {
@@ -46,6 +82,7 @@ function AdminLessonEdit() {
       setContent(data.conteudo_texto);
       setDuration(data.duracao);
       setOrder(data.ordem);
+      setModuleId(data.modulo_id);
     } catch (err: any) {
       console.error('Erro ao carregar dados da aula:', err);
       setError(err.message || 'Erro ao carregar dados da aula');
@@ -84,8 +121,13 @@ function AdminLessonEdit() {
         throw new Error('ID do curso inválido.');
       }
 
+      if (!moduleId) {
+        throw new Error('Por favor, selecione um módulo para a aula.');
+      }
+
       const lessonData = {
         curso_id: cursoId,
+        modulo_id: moduleId,
         titulo: title,
         video_url: videoUrl,
         conteudo_texto: content,
@@ -164,6 +206,26 @@ function AdminLessonEdit() {
             required
             placeholder="Digite o título da aula"
           />
+        </div>
+
+        <div className={styles.formGroup}>
+          <label htmlFor="module">Módulo</label>
+          <select
+            id="module"
+            value={moduleId || ''}
+            onChange={(e) => setModuleId(e.target.value ? parseInt(e.target.value) : null)}
+            required
+          >
+            <option value="">Selecione um módulo</option>
+            {modules.map((module) => (
+              <option key={module.id} value={module.id}>
+                {module.titulo}
+              </option>
+            ))}
+          </select>
+          <small className={styles.helper}>
+            Escolha o módulo ao qual esta aula pertence
+          </small>
         </div>
 
         <div className={styles.formGroup}>

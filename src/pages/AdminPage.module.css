@@ -1,126 +1,166 @@
 .container {
-  max-width: 1000px;
+  max-width: 800px;
   margin: 0 auto;
   padding: var(--space-4);
 }
 
 .header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  gap: var(--space-3);
   margin-bottom: var(--space-4);
+}
+
+.backButton {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  color: var(--color-text-secondary);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-md);
+  transition: background-color var(--transition-normal), color var(--transition-normal);
+  font-size: var(--font-size-sm);
   
-  h1 {
-    margin-bottom: 0;
+  &:hover {
+    background-color: var(--color-surface-hover);
+    color: var(--color-text-primary);
   }
 }
 
-.newButton {
+.form {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+}
+
+.formGroup {
+  margin-bottom: var(--space-3);
+  
+  label {
+    display: block;
+    margin-bottom: var(--space-1);
+    font-weight: 500;
+    color: var(--color-text-primary);
+  }
+  
+  input, textarea, select {
+    width: 100%;
+    padding: var(--space-2) var(--space-3);
+    background-color: var(--color-background);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    color: var(--color-text-primary);
+    font-size: var(--font-size-md);
+    
+    &:focus {
+      border-color: var(--color-accent);
+      outline: none;
+    }
+  }
+  
+  select {
+    cursor: pointer;
+    
+    option {
+      background-color: var(--color-background);
+      color: var(--color-text-primary);
+    }
+  }
+  
+  textarea {
+    resize: vertical;
+    min-height: 200px;
+    font-family: var(--font-family);
+  }
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+  
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.helper {
+  display: block;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-tertiary);
+  margin-top: var(--space-1);
+}
+
+.formActions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: var(--space-4);
+}
+
+.saveButton, .deleteButton {
   display: inline-flex;
   align-items: center;
   gap: var(--space-2);
-  background-color: var(--color-accent);
-  color: white;
   padding: var(--space-2) var(--space-3);
   border-radius: var(--radius-md);
   font-weight: 500;
   transition: background-color var(--transition-normal);
+  border: none;
+  cursor: pointer;
+}
+
+.saveButton {
+  background-color: var(--color-accent);
+  color: white;
   
-  &:hover {
+  &:hover:not(:disabled) {
     background-color: var(--color-accent-hover);
-    color: white;
-  }
-}
-
-.courseList {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
-}
-
-.courseItem {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: var(--space-3);
-  background-color: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  transition: background-color var(--transition-normal);
-  
-  &:hover {
-    background-color: var(--color-surface-hover);
-  }
-}
-
-.courseInfo {
-  flex: 1;
-  
-  h3 {
-    font-size: var(--font-size-lg);
-    font-weight: 500;
-    margin-bottom: var(--space-1);
   }
   
-  p {
-    color: var(--color-text-secondary);
-    font-size: var(--font-size-sm);
-    margin-bottom: 0;
-  }
-}
-
-.courseActions {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-}
-
-.editButton, .deleteButton {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  border-radius: var(--radius-md);
-  transition: background-color var(--transition-normal), color var(--transition-normal);
-  
-  &:hover {
-    background-color: var(--color-surface-active);
-  }
-}
-
-.editButton {
-  background-color: var(--color-surface);
-  color: var(--color-text-secondary);
-  border: 1px solid var(--color-border);
-  
-  &:hover {
-    color: var(--color-accent);
+  &:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
   }
 }
 
 .deleteButton {
-  background-color: var(--color-surface);
-  color: var(--color-text-secondary);
-  border: 1px solid var(--color-border);
-  cursor: pointer;
+  background-color: transparent;
+  color: var(--color-error);
+  border: 1px solid var(--color-error);
   
   &:hover {
-    color: var(--color-error);
+    background-color: rgba(239, 68, 68, 0.1);
   }
 }
 
-.confirmDelete {
+.deleteConfirm {
+  background-color: rgba(239, 68, 68, 0.1);
+  border: 1px solid var(--color-error);
+  border-radius: var(--radius-md);
+  padding: var(--space-3);
+  
+  p {
+    color: var(--color-error);
+    margin-bottom: var(--space-2);
+    font-weight: 500;
+  }
+}
+
+.confirmButtons {
   display: flex;
-  align-items: center;
-  gap: var(--space-1);
+  gap: var(--space-2);
 }
 
 .confirmYes, .confirmNo {
   padding: var(--space-1) var(--space-2);
-  border-radius: var(--radius-sm);
-  font-size: var(--font-size-xs);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
   font-weight: 500;
+  border: none;
   cursor: pointer;
   transition: background-color var(--transition-normal);
 }
@@ -128,10 +168,14 @@
 .confirmYes {
   background-color: var(--color-error);
   color: white;
-  border: none;
   
-  &:hover {
+  &:hover:not(:disabled) {
     background-color: color-mix(in srgb, var(--color-error), black 10%);
+  }
+  
+  &:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
   }
 }
 
@@ -145,16 +189,6 @@
   }
 }
 
-.emptyState {
-  text-align: center;
-  padding: var(--space-5) 0;
-  color: var(--color-text-secondary);
-  
-  p {
-    margin-bottom: var(--space-2);
-  }
-}
-
 .loading, .error {
   padding: var(--space-4);
   text-align: center;
@@ -164,4 +198,5 @@
   color: var(--color-error);
   background-color: rgba(239, 68, 68, 0.1);
   border-radius: var(--radius-md);
+  margin-bottom: var(--space-3);
 }
