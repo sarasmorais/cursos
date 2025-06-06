@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { Database } from '../lib/database.types';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, PlusCircle } from 'lucide-react';
 import styles from './AdminCourseEdit.module.css';
 
 type Course = Database['public']['Tables']['cursos']['Row'];
@@ -58,45 +58,49 @@ function AdminCourseEdit() {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
-  setSaving(true);
-  setError(null);
+    e.preventDefault();
+    setSaving(true);
+    setError(null);
 
-  try {
-    const courseData = {
-      titulo: title,
-      descricao: description,
-      ordem: 0,
-    };
+    try {
+      const courseData = {
+        titulo: title,
+        descricao: description,
+        ordem: 0,
+      };
 
-    const isCreating = courseId === 'novo' || !courseId;
-    let savedCourseId: string | number;
+      const isCreating = courseId === 'novo' || !courseId;
+      let savedCourseId: string | number;
 
-    if (isCreating) {
-      const { data, error } = await supabase
-        .from('cursos')
-        .insert([courseData])
-        .select();
+      if (isCreating) {
+        const { data, error } = await supabase
+          .from('cursos')
+          .insert([courseData])
+          .select('id');
 
-      if (error) throw error;
-      savedCourseId = data[0].id;
-    } else {
-      const { error } = await supabase
-        .from('cursos')
-        .update(courseData)
-        .eq('id', courseId);
+        if (error || !data || !data[0]) throw error || new Error('Curso não foi salvo.');
 
-      if (error) throw error;
-      savedCourseId = courseId;
+        savedCourseId = data[0].id;
+      } else {
+        if (!courseId) throw new Error('ID do curso não encontrado.');
+
+        const { error } = await supabase
+          .from('cursos')
+          .update(courseData)
+          .eq('id', courseId);
+
+        if (error) throw error;
+        savedCourseId = courseId;
+      }
+
+      navigate(`/admin/curso/${savedCourseId}`);
+    } catch (err: any) {
+      console.error('Erro ao salvar curso:', err);
+      setError(err.message || 'Erro ao salvar curso');
+    } finally {
+      setSaving(false);
     }
-
-    navigate(`/admin/curso/${savedCourseId}`);
-  } catch (err: any) {
-    console.error('Erro ao salvar curso:', err);
-    setError(err.message || 'Erro ao salvar curso');
-    setSaving(false);
-  }
-};
+  };
 
   if (loading) {
     return <div className={styles.loading}>Carregando curso...</div>;
@@ -142,6 +146,27 @@ function AdminCourseEdit() {
           Salvar Curso
         </button>
       </form>
+
+      {!isNewCourse && (
+        <div className={styles.lessonsSection}>
+          <h2>Aulas</h2>
+          <div className={styles.lessonsList}>
+            {lessons.map((lesson) => (
+              <div key={lesson.id} className={styles.lessonItem}>
+                <div>
+                  <strong>{lesson.titulo}</strong>
+                  <p>{lesson.descricao}</p>
+                  <small>Duração: {lesson.duracao} min</small>                </div>
+              </div>
+            ))}
+          </div>
+
+          <Link to={`/admin/curso/${courseId}/aula/nova`} className={styles.addLessonButton}>
+            <PlusCircle size={18} />
+            <span>Adicionar Nova Aula</span>
+          </Link>
+        </div>
+      )}
     </div>
   );
 }
