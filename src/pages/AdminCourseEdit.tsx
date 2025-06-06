@@ -161,10 +161,11 @@ function AdminCourseEdit() {
             ))}
           </div>
 
-          <Link to={`/admin/curso/${courseId}/aula/nova`} className={styles.addLessonButton}>
+          <Link to={`/admin/curso/${courseId}/aula/nova`} className={styles.saveButton}>
             <PlusCircle size={18} />
-            <span>Adicionar Nova Aula</span>
+            <span>Nova Aula</span>
           </Link>
+
         </div>
       )}
     </div>
