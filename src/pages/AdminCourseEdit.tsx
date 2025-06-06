@@ -69,10 +69,10 @@ function AdminCourseEdit() {
       ordem: 0,
     };
 
+    const isCreating = courseId === 'novo' || !courseId;
     let savedCourseId: string | number;
 
-    if (courseId === 'novo') {
-      // Criar novo curso
+    if (isCreating) {
       const { data, error } = await supabase
         .from('cursos')
         .insert([courseData])
@@ -81,9 +81,6 @@ function AdminCourseEdit() {
       if (error) throw error;
       savedCourseId = data[0].id;
     } else {
-      // Atualizar curso existente
-      if (!courseId) throw new Error('ID do curso não encontrado.');
-
       const { error } = await supabase
         .from('cursos')
         .update(courseData)
