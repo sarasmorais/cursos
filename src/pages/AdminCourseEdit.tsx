@@ -66,6 +66,7 @@ function AdminCourseEdit() {
       const courseData = {
         titulo: title,
         descricao: description,
+        ordem: 0,
       };
       
       let savedCourseId: string | number = courseId!;
