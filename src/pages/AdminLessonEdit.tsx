@@ -8,7 +8,9 @@ function AdminLessonEdit() {
   const { courseId, lessonId } = useParams<{ courseId: string; lessonId: string }>();
   const navigate = useNavigate();
   const isNewLesson = lessonId === 'nova';
-  
+
+  const cursoId = parseInt(courseId ?? '', 10); // ✅ garante curso_id como número
+
   const [title, setTitle] = useState('');
   const [videoUrl, setVideoUrl] = useState('');
   const [content, setContent] = useState('');
@@ -24,10 +26,9 @@ function AdminLessonEdit() {
     if (!isNewLesson) {
       fetchLessonData();
     } else {
-      // For new lesson, get the next order value
       fetchNextOrderValue();
     }
-  }, [courseId, lessonId, isNewLesson]);
+  }, [cursoId, lessonId, isNewLesson]);
 
   const fetchLessonData = async () => {
     try {
@@ -36,9 +37,9 @@ function AdminLessonEdit() {
         .select('*')
         .eq('id', lessonId)
         .single();
-      
+
       if (error) throw error;
-      
+
       setTitle(data.titulo);
       setVideoUrl(data.video_url);
       setContent(data.conteudo_texto);
@@ -57,13 +58,12 @@ function AdminLessonEdit() {
       const { data, error } = await supabase
         .from('aulas')
         .select('ordem')
-        .eq('curso_id', courseId)
+        .eq('curso_id', cursoId)
         .order('ordem', { ascending: false })
         .limit(1);
-      
+
       if (error) throw error;
-      
-      // Set order to be one more than the highest current order
+
       const nextOrder = data.length > 0 ? data[0].ordem + 1 : 1;
       setOrder(nextOrder);
       setLoading(false);
@@ -77,35 +77,32 @@ function AdminLessonEdit() {
     e.preventDefault();
     setSaving(true);
     setError(null);
-    
+
     try {
+      if (!cursoId || isNaN(cursoId)) {
+        throw new Error('ID do curso inválido.');
+      }
+
       const lessonData = {
-        curso_id: parseInt(courseId!),
+        curso_id: cursoId,
         titulo: title,
         video_url: videoUrl,
         conteudo_texto: content,
         duracao: duration,
         ordem: order,
       };
-      
+
       if (isNewLesson) {
-        // Create new lesson
-        const { error } = await supabase
-          .from('aulas')
-          .insert([lessonData]);
-        
+        const { error } = await supabase.from('aulas').insert([lessonData]);
         if (error) throw error;
       } else {
-        // Update existing lesson
         const { error } = await supabase
           .from('aulas')
           .update(lessonData)
           .eq('id', lessonId);
-        
         if (error) throw error;
       }
-      
-      // Redirect back to course edit page
+
       navigate(`/admin/curso/${courseId}`);
     } catch (err: any) {
       console.error('Erro ao salvar aula:', err);
@@ -116,20 +113,13 @@ function AdminLessonEdit() {
 
   const handleDelete = async () => {
     if (!lessonId || isNewLesson) return;
-    
+
     setDeleting(true);
     setError(null);
-    
+
     try {
-      // Delete the lesson
-      const { error } = await supabase
-        .from('aulas')
-        .delete()
-        .eq('id', lessonId);
-      
+      const { error } = await supabase.from('aulas').delete().eq('id', lessonId);
       if (error) throw error;
-      
-      // Redirect back to course edit page
       navigate(`/admin/curso/${courseId}`);
     } catch (err: any) {
       console.error('Erro ao excluir aula:', err);
@@ -152,9 +142,9 @@ function AdminLessonEdit() {
         </Link>
         <h1>{isNewLesson ? 'Nova Aula' : 'Editar Aula'}</h1>
       </div>
-      
+
       {error && <div className={styles.error}>{error}</div>}
-      
+
       <form onSubmit={handleSubmit} className={styles.form}>
         <div className={styles.formGroup}>
           <label htmlFor="title">Título da Aula</label>
@@ -167,7 +157,7 @@ function AdminLessonEdit() {
             placeholder="Digite o título da aula"
           />
         </div>
-        
+
         <div className={styles.formGroup}>
           <label htmlFor="videoUrl">URL do Vídeo (YouTube)</label>
           <input
@@ -182,7 +172,7 @@ function AdminLessonEdit() {
             Cole a URL completa do vídeo do YouTube
           </small>
         </div>
-        
+
         <div className={styles.formRow}>
           <div className={styles.formGroup}>
             <label htmlFor="duration">Duração</label>
@@ -194,11 +184,9 @@ function AdminLessonEdit() {
               required
               placeholder="ex: 10:30"
             />
-            <small className={styles.helper}>
-              Formato: minutos:segundos
-            </small>
+            <small className={styles.helper}>Formato: minutos:segundos</small>
           </div>
-          
+
           <div className={styles.formGroup}>
             <label htmlFor="order">Ordem</label>
             <input
@@ -209,12 +197,10 @@ function AdminLessonEdit() {
               required
               min="1"
             />
-            <small className={styles.helper}>
-              Posição da aula no curso
-            </small>
+            <small className={styles.helper}>Posição da aula no curso</small>
           </div>
         </div>
-        
+
         <div className={styles.formGroup}>
           <label htmlFor="content">Conteúdo da Aula</label>
           <textarea
@@ -229,7 +215,7 @@ function AdminLessonEdit() {
             Você pode usar tags HTML para formatar o conteúdo
           </small>
         </div>
-        
+
         <div className={styles.formActions}>
           <button
             type="submit"
@@ -239,7 +225,7 @@ function AdminLessonEdit() {
             <Save size={18} />
             <span>{saving ? 'Salvando...' : 'Salvar Aula'}</span>
           </button>
-          
+
           {!isNewLesson && (
             <>
               {showDeleteConfirm ? (
