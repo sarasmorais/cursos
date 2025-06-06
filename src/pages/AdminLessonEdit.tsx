@@ -9,7 +9,7 @@ function AdminLessonEdit() {
   const navigate = useNavigate();
   const isNewLesson = lessonId === 'nova';
 
-  const cursoId = parseInt(courseId ?? '', 10); // ✅ garante curso_id como número
+  const cursoId = parseInt(courseId ?? '', 10); // conversão segura
 
   const [title, setTitle] = useState('');
   const [videoUrl, setVideoUrl] = useState('');
@@ -23,12 +23,12 @@ function AdminLessonEdit() {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   useEffect(() => {
-    if (!isNewLesson) {
+    if (lessonId && lessonId !== 'nova') {
       fetchLessonData();
-    } else {
+    } else if (cursoId && !isNaN(cursoId)) {
       fetchNextOrderValue();
     }
-  }, [cursoId, lessonId, isNewLesson]);
+  }, [cursoId, lessonId]);
 
   const fetchLessonData = async () => {
     try {
