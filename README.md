@@ -62,7 +62,7 @@ Este projeto foi desenvolvido com ❤️ por:
 
 - [Sara Morais](https://github.com/sarasmorais) 💡  
 - [Letícia Farias](https://github.com/leticiafariasn) 🔧  
-- [Leilla Carvalho](https://github.com/Leillac88) ✨  
+- [Leilla Carvalho](https://github.com/Leillac88) 🛢️  
 
 Contribuições são sempre bem-vindas! 🙌
 
@@ -79,3 +79,11 @@ Veja `LICENSE` para mais informações.
 
 Entre em contato conosco pelo GitHub ou abra uma **Issue** com sugestões, bugs ou elogios!  
 Vamos adorar saber sua opinião 💬😊
+
+---
+
+## 🧑‍🏫 Orientação
+
+Este projeto foi desenvolvido com a orientação de **Luan Oliveira**, que guiou e apoiou o time durante todo o processo com dedicação e expertise. 👏🎯  
+Muito obrigada pelo suporte e inspiração! 💙
+
