@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { supabase } from '../lib/supabase';
 import CourseCard from '../components/CourseCard';
 import { Database } from '../lib/database.types';
+import { Search, X } from 'lucide-react';
 import styles from './HomePage.module.css';
 
 type Course = Database['public']['Tables']['cursos']['Row'];
@@ -10,6 +11,7 @@ function HomePage() {
   const [courses, setCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState(true);
   const [lessonCounts, setLessonCounts] = useState<Record<number, number>>({});
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     const fetchCourses = async () => {
@@ -49,6 +51,23 @@ function HomePage() {
     fetchCourses();
   }, []);
 
+  // Filtrar cursos baseado no termo de pesquisa
+  const filteredCourses = useMemo(() => {
+    if (!searchTerm.trim()) {
+      return courses;
+    }
+
+    const term = searchTerm.toLowerCase();
+    return courses.filter(course => 
+      course.titulo.toLowerCase().includes(term) ||
+      course.descricao.toLowerCase().includes(term)
+    );
+  }, [courses, searchTerm]);
+
+  const clearSearch = () => {
+    setSearchTerm('');
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.hero}>
@@ -57,15 +76,58 @@ function HomePage() {
       </div>
       
       <section className={styles.coursesSection}>
-        <h2>Cursos Disponíveis</h2>
+        <div className={styles.sectionHeader}>
+          <h2>Cursos Disponíveis</h2>
+          <div className={styles.searchContainer}>
+            <div className={styles.searchBox}>
+              <Search size={20} className={styles.searchIcon} />
+              <input
+                type="text"
+                placeholder="Pesquisar cursos..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className={styles.searchInput}
+              />
+              {searchTerm && (
+                <button
+                  onClick={clearSearch}
+                  className={styles.clearButton}
+                  aria-label="Limpar pesquisa"
+                >
+                  <X size={18} />
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {searchTerm && (
+          <div className={styles.searchResults}>
+            <p>
+              {filteredCourses.length === 0 
+                ? `Nenhum curso encontrado para "${searchTerm}"`
+                : `${filteredCourses.length} curso${filteredCourses.length !== 1 ? 's' : ''} encontrado${filteredCourses.length !== 1 ? 's' : ''} para "${searchTerm}"`
+              }
+            </p>
+          </div>
+        )}
         
         {loading ? (
-          <p>Carregando cursos...</p>
-        ) : courses.length === 0 ? (
-          <p>Nenhum curso disponível no momento.</p>
+          <div className={styles.loading}>
+            <p>Carregando cursos...</p>
+          </div>
+        ) : filteredCourses.length === 0 && !searchTerm ? (
+          <div className={styles.emptyState}>
+            <p>Nenhum curso disponível no momento.</p>
+          </div>
+        ) : filteredCourses.length === 0 && searchTerm ? (
+          <div className={styles.noResults}>
+            <p>Não encontramos cursos com os termos pesquisados.</p>
+            <p>Tente usar palavras-chave diferentes ou verifique a ortografia.</p>
+          </div>
         ) : (
           <div className={styles.courseGrid}>
-            {courses.map(course => (
+            {filteredCourses.map(course => (
               <CourseCard 
                 key={course.id} 
                 course={course} 
