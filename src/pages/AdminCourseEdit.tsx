@@ -58,44 +58,48 @@ function AdminCourseEdit() {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setSaving(true);
-    setError(null);
+  e.preventDefault();
+  setSaving(true);
+  setError(null);
 
-    try {
-      const courseData = {
-        titulo: title,
-        descricao: description,
-        ordem: 0,
-      };
+  try {
+    const courseData = {
+      titulo: title,
+      descricao: description,
+      ordem: 0,
+    };
 
-      let savedCourseId: string | number = courseId!;
+    let savedCourseId: string | number;
 
-      if (isNewCourse) {
-        const { data, error } = await supabase
-          .from('cursos')
-          .insert([courseData])
-          .select();
+    if (courseId === 'novo') {
+      // Criar novo curso
+      const { data, error } = await supabase
+        .from('cursos')
+        .insert([courseData])
+        .select();
 
-        if (error) throw error;
+      if (error) throw error;
+      savedCourseId = data[0].id;
+    } else {
+      // Atualizar curso existente
+      if (!courseId) throw new Error('ID do curso não encontrado.');
 
-        savedCourseId = data[0].id;
-      } else {
-        const { error } = await supabase
-          .from('cursos')
-          .update(courseData)
-          .eq('id', courseId);
+      const { error } = await supabase
+        .from('cursos')
+        .update(courseData)
+        .eq('id', courseId);
 
-        if (error) throw error;
-      }
-
-      navigate(isNewCourse ? `/admin/curso/${savedCourseId}` : '/admin');
-    } catch (err: any) {
-      console.error('Erro ao salvar curso:', err);
-      setError(err.message || 'Erro ao salvar curso');
-      setSaving(false);
+      if (error) throw error;
+      savedCourseId = courseId;
     }
-  };
+
+    navigate(`/admin/curso/${savedCourseId}`);
+  } catch (err: any) {
+    console.error('Erro ao salvar curso:', err);
+    setError(err.message || 'Erro ao salvar curso');
+    setSaving(false);
+  }
+};
 
   if (loading) {
     return <div className={styles.loading}>Carregando curso...</div>;
