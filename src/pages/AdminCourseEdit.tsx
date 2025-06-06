@@ -21,8 +21,10 @@ function AdminCourseEdit() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!isNewCourse && courseId && courseId !== 'undefined') {
+    if (!isNewCourse && courseId && courseId !== 'undefined' && courseId !== 'novo') {
       fetchCourseData();
+    } else {
+      setLoading(false);
     }
   }, [courseId, isNewCourse]);
 
