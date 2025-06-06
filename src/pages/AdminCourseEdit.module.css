@@ -91,6 +91,26 @@
   }
 }
 
+.linkButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  background-color: var(--color-accent);
+  color: white;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  font-weight: 500;
+  text-decoration: none;
+  font-size: var(--font-size-md);
+  transition: background-color var(--transition-normal), color var(--transition-normal);
+}
+
+.linkButton:hover {
+  background-color: var(--color-accent-hover);
+  color: white;
+}
+
 .lessonsSection {
   background-color: var(--color-surface);
   border: 1px solid var(--color-border);

@@ -161,8 +161,8 @@ function AdminCourseEdit() {
             ))}
           </div>
 
-          <Link to={`/admin/curso/${courseId}/aula/nova`} className={styles.saveButton}>
-            <PlusCircle size={18} style={{ marginRight: '0.5rem' }} />
+          <Link to={`/admin/curso/${courseId}/aula/nova`} className={styles.linkButton}>
+            <PlusCircle size={18} />
             Nova Aula
           </Link>
 
