@@ -3,7 +3,7 @@ import styles from './LandingPage.module.css';
 
 function LandingPage() {
   return (
-    <div className={styles.container}>
+    <div className={`${styles.container} ${styles.fadeIn}`}>
       <header className={styles.header}>
         <h1>Bem-vindo ao <span className={styles.highlight}>courseOS</span></h1>
         <p>Uma plataforma gratuita para aprender no seu ritmo, sem barreiras.</p>
