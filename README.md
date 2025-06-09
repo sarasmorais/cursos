@@ -19,7 +19,7 @@ Um projeto desenvolvido com **React** e **Supabase**, pensado para gerenciar cur
 
 - [React](https://reactjs.org) ⚛️  
 - [Supabase](https://supabase.com) 🔐  
-- [JavaScript (ES6+)](https://developer.mozilla.org/pt-BR/docs/Web/JavaScript) 📜  
+- [TypeScript](https://developer.mozilla.org/en-US/docs/Glossary/TypeScript) 📜  
 - [Vite](https://vitejs.dev) ⚡  
 - [CSS Modules](https://github.com/css-modules/css-modules) 🎨
 
@@ -82,7 +82,7 @@ Vamos adorar saber sua opinião 💬😊
 
 ---
 
-## 🧑‍🏫 Orientação
+## 👨‍🏫 Orientação
 
 Este projeto foi desenvolvido com a orientação de **Luan Oliveira**, que guiou e apoiou o time durante todo o processo com dedicação e expertise. 👏🎯  
 Muito obrigada pelo suporte e inspiração! 💙
