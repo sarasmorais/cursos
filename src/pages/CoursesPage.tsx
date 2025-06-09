@@ -3,11 +3,11 @@ import { supabase } from '../lib/supabase';
 import CourseCard from '../components/CourseCard';
 import { Database } from '../lib/database.types';
 import { Search, X } from 'lucide-react';
-import styles from './HomePage.module.css';
+import styles from './CoursesPage.module.css';
 
 type Course = Database['public']['Tables']['cursos']['Row'];
 
-function HomePage() {
+function CoursesPage() {
   const [courses, setCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState(true);
   const [lessonCounts, setLessonCounts] = useState<Record<number, number>>({});
@@ -21,24 +21,24 @@ function HomePage() {
           .from('cursos')
           .select('*')
           .order('ordem');
-        
+
         if (coursesError) throw coursesError;
-        
+
         // Fetch lesson counts for each course
         const courseIds = coursesData.map(course => course.id);
         const { data: lessonData, error: lessonError } = await supabase
           .from('aulas')
           .select('curso_id, id')
           .in('curso_id', courseIds);
-        
+
         if (lessonError) throw lessonError;
-        
+
         // Count lessons per course
         const counts: Record<number, number> = {};
         lessonData.forEach(lesson => {
           counts[lesson.curso_id] = (counts[lesson.curso_id] || 0) + 1;
         });
-        
+
         setCourses(coursesData);
         setLessonCounts(counts);
       } catch (error) {
@@ -47,7 +47,7 @@ function HomePage() {
         setLoading(false);
       }
     };
-    
+
     fetchCourses();
   }, []);
 
@@ -58,7 +58,7 @@ function HomePage() {
     }
 
     const term = searchTerm.toLowerCase();
-    return courses.filter(course => 
+    return courses.filter(course =>
       course.titulo.toLowerCase().includes(term) ||
       course.descricao.toLowerCase().includes(term)
     );
@@ -74,7 +74,7 @@ function HomePage() {
         <h1>Plataforma de Cursos Gratuitos</h1>
         <p>Aprenda habilidades valiosas com nossos cursos online gratuitos.</p>
       </div>
-      
+
       <section className={styles.coursesSection}>
         <div className={styles.sectionHeader}>
           <h2>Cursos Disponíveis</h2>
@@ -104,14 +104,14 @@ function HomePage() {
         {searchTerm && (
           <div className={styles.searchResults}>
             <p>
-              {filteredCourses.length === 0 
+              {filteredCourses.length === 0
                 ? `Nenhum curso encontrado para "${searchTerm}"`
                 : `${filteredCourses.length} curso${filteredCourses.length !== 1 ? 's' : ''} encontrado${filteredCourses.length !== 1 ? 's' : ''} para "${searchTerm}"`
               }
             </p>
           </div>
         )}
-        
+
         {loading ? (
           <div className={styles.loading}>
             <p>Carregando cursos...</p>
@@ -128,9 +128,9 @@ function HomePage() {
         ) : (
           <div className={styles.courseGrid}>
             {filteredCourses.map(course => (
-              <CourseCard 
-                key={course.id} 
-                course={course} 
+              <CourseCard
+                key={course.id}
+                course={course}
                 lessonCount={lessonCounts[course.id] || 0}
               />
             ))}
@@ -141,4 +141,4 @@ function HomePage() {
   );
 }
 
-export default HomePage;
+export default CoursesPage;
